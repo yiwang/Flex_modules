@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" 
+		   layout="vertical" width="366" height="200" borderStyle="solid" cornerRadius="11" borderColor="#000305" borderThickness="2" 
+		   implements="com.adobe.IUserInput" >
+	
+	<mx:Script>
+		
+		<![CDATA[
+			
+			import mx.controls.Alert;
+			
+			[Bindable]
+			
+			private var heading:String = "Your suggestion please";
+			
+			private function submitSuggestion():void
+				
+			{
+				
+				parentApplication.suggestionProgress.text = "We will consider your suggestion";
+				
+				parentApplication.suggestionProgress.visible = true;
+				
+				parentApplication.closeSuggestion();
+				
+			}
+			
+			public function setHeaderMessage(message:String):void
+				
+			{
+				
+				this.heading = message;
+				
+			}
+			
+		]]>
+		
+	</mx:Script>
+	
+	<mx:Form width="100%" height="100%">
+		
+		<mx:FormHeading label="{heading}"/>
+		
+		<mx:FormItem label="Your Name">
+			
+			<mx:TextInput id="userName" width="233"/>
+			
+		</mx:FormItem>
+		
+		<mx:FormItem label="Suggestion">
+			
+			<mx:TextArea id="description" width="234"/>
+			
+		</mx:FormItem>
+		
+		<mx:ControlBar width="100%" horizontalAlign="center">
+			
+			<mx:Button label="Submit" click="submitSuggestion();"/>
+			
+			<mx:Button label="Cancel" click="parentApplication.closeSuggestion();"/>
+			
+		</mx:ControlBar>
+		
+	</mx:Form>
+	
+</mx:Module>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical">
+	
+	<mx:Script>
+		
+		<![CDATA[
+			
+			import mx.controls.Alert;
+			
+			import mx.managers.PopUpManager;
+			
+			import mx.events.ModuleEvent;
+			
+			import mx.modules.ModuleManager;
+			
+			import mx.modules.IModuleInfo;
+			
+			private var moduleInfo:IModuleInfo;
+			
+			private var suggestion:SuggestionModule;
+			
+			private function loadSuggestionModule():void
+				
+			{
+				
+				moduleInfo = ModuleManager.getModule("SuggestionModule.swf");
+				
+				moduleInfo.addEventListener(ModuleEvent.READY, renderSuggestionModule);
+				
+				moduleInfo.addEventListener(ModuleEvent.ERROR, handleError);
+				
+				moduleInfo.addEventListener(ModuleEvent.PROGRESS, showProgress);
+				
+				moduleInfo.load();
+				
+				suggestionProgress.visible = true;
+				
+			}
+			
+			private function renderSuggestionModule(event:ModuleEvent):void
+				
+			{
+				
+				suggestion = moduleInfo.factory.create() as SuggestionModule;
+				
+				suggestion.setHeaderMessage("Suggestion - Home Page");
+				
+				PopUpManager.addPopUp(suggestion, this, true);
+				
+				PopUpManager.centerPopUp(suggestion);
+				
+				suggestionProgress.visible = false;
+				
+			}
+			
+			public function closeSuggestion():void
+				
+			{
+				
+				PopUpManager.removePopUp(suggestion);
+				
+				moduleInfo.unload();
+				
+			}
+			
+			private function showProgress(event:ModuleEvent):void
+				
+			{
+				
+				suggestionProgress.text = "Loaded " + Math.round((event.bytesLoaded / event.bytesTotal)* 100) + "%";
+				
+			}
+			
+			private function handleError(event:ModuleEvent):void
+				
+			{
+				
+				Alert.show(event.errorText,"Error");
+				
+				suggestionProgress.visible = false;
+				
+			}
+			
+		]]>
+		
+	</mx:Script>
+	
+	<mx:Button id="chartModuleBtn" label="Suggest" click="loadSuggestionModule();"/>
+	
+	<mx:Label id="suggestionProgress" text="Loaded 0%" visible="false"/>
+	
+</mx:Application>
